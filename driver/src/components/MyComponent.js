@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from "axios"
 import LoginScreen from "../screens/LoginScreen"
 import SplashScreen from "../screens/SplashScreen";
+import YourComponent from "../screens/YourComponent";
 
 export default function Component() {
   const styles = useStyles();
@@ -55,8 +56,8 @@ export default function Component() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        {state.isLogin? <AppDrawerNavigator /> : <GuestStackNavigator />}
-        
+        {/* {state.isLogin? <AppDrawerNavigator /> : <GuestStackNavigator />} */}
+        <YourComponent />        
       </SafeAreaView>
     </SafeAreaProvider>
   );
