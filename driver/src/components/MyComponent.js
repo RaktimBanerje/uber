@@ -7,9 +7,6 @@ import { StoreContext } from "../../App"
 import { API_SERVER_URI } from "@env"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from "axios"
-import LoginScreen from "../screens/LoginScreen"
-import SplashScreen from "../screens/SplashScreen";
-import YourComponent from "../screens/YourComponent";
 
 export default function Component() {
   const styles = useStyles();
@@ -20,44 +17,43 @@ export default function Component() {
   };
 
   const {state, dispatch} = React.useContext(StoreContext)
-
-  const login = () => {
-
-  }
+  const [isLoading, setLoading] = React.useState(false)
 
   React.useEffect(() => {
     (async () => {
       try {
+        setLoading(true)
+        const user = await AsyncStorage.getItem("user")
         const token = await AsyncStorage.getItem("token")
         if (token) {
-            const res = await axios.post(`${API_SERVER_URI}/api/driver/login`)
+            const res = await axios.post(`${API_SERVER_URI}/api/driver/isAuthenticate`, {token})
             if(res.status == 200) {
-  
-              dispatch({type: "LOGIN", payload: {user: res.data.driver, token: res.data.token}})
-            }
-            else if(res.status == 401) {
-              login()
+              setLoading()
+              dispatch(
+                {
+                  type: "LOGIN", 
+                  payload: {user, token}
+                }
+              )
             }
             else {
               alert("Server Error: 500", "Try again later")
             }
         }
-        else {
-          login()
-        }
       }
       catch (error) {
         alert("Oops!", "Try again later");
       }
+      finally {
+        setLoading(false)
+      }
     })()
-
   }, [])
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        {/* {state.isLogin? <AppDrawerNavigator /> : <GuestStackNavigator />} */}
-        <YourComponent />        
+        {(isLoading == false && state.isLogin == true) ? <AppDrawerNavigator /> : <GuestStackNavigator />}
       </SafeAreaView>
     </SafeAreaProvider>
   );

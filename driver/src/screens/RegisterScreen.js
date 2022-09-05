@@ -5,7 +5,6 @@ import { StoreContext } from '../../App'
 import { API_SERVER_URI } from "@env"
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
-import { Icon } from '@rneui/themed'
 import { AntDesign } from '@expo/vector-icons'; 
 
 const RegisterScreen = () => {
@@ -15,14 +14,29 @@ const RegisterScreen = () => {
     const [pin, setPin] = React.useState(null)
     const [isLoading, setLoading] = React.useState(false)
     const [isRegistered, setIsRegistered] = React.useState(false)
+    const [isAlreadyRegistered, setIsAlreadyRegistered] = React.useState(false)
     const { state, dispatch } = React.useContext(StoreContext)
-    
 
     const submit = () => {
         setLoading(true)
         axios.post(`${API_SERVER_URI}/api/driver/register`, {phone: mobile , pin: pin})
-        .then(res => alert(res.data.token))
-        .catch(err => console.log(err.response.status))
+        .then(res => {
+            setLoading(false)
+            if(res.data.registered) {   
+                setIsAlreadyRegistered(true)
+            }
+            else {
+                setIsRegistered(true)
+                dispatch({
+                    type: "LOGIN",
+                    payload: {
+                        "user": res.data.driver,
+                        "token": res.data.token
+                    }
+                })
+            }
+        })
+        .catch(err => console.log(err))
     }
 
     const styles = StyleSheet.create({
@@ -64,13 +78,16 @@ const RegisterScreen = () => {
             <Image source={require("../../assets/logo.png")} style={styles.logoStyle}/>
 
             <View style={styles.contentContainer}>        
-                { isRegistered ? (
+                { isRegistered || isAlreadyRegistered ? (
                     <View style={{marginBottom: 40}}>
                         <View style={{flexDirection: "row", justifyContent: "center"}}> 
                             <AntDesign name="check" size={50} color="#00C851" />
                         </View>
                         <View style={{flexDirection: "row", justifyContent: "center"}}>
-                            <Text style={{fontSize: 18, fontWeight: "bold", color: "#00C851"}}>You are registered</Text>
+                            <Text style={{fontSize: 18, fontWeight: "bold", color: "#00C851"}}>
+                                { isRegistered && "You are registered" }
+                                { isAlreadyRegistered && "You are already registered" }
+                            </Text>
                         </View>
                     </View>
                 ) : (
@@ -104,10 +121,10 @@ const RegisterScreen = () => {
                     containerStyle={styles.buttonContainerStyle}
                     buttonStyle={styles.buttonStyle}
                     titleStyle={styles.buttonTitleStyle}
-                    onPress={isRegistered ? ()=>navigation.navigate("Login") : submit} 
+                    onPress={isRegistered || isAlreadyRegistered ? ()=>navigation.navigate("Login") : submit} 
                 >
-                    {isRegistered ? "Login  " : "Register"}
-                    {isRegistered && <AntDesign name="arrowright" size={20} color="white" />}
+                    {isRegistered || isAlreadyRegistered ? "Login  " : "Register"}
+                    {(isRegistered || isAlreadyRegistered) && <AntDesign name="arrowright" size={20} color="white" />}
                 </Button>
             </View>
         </View>

@@ -4,7 +4,8 @@ const app = express()
 const cors = require("cors")
 const mongoose = require("mongoose")
 
-const driverAuth = require("./routes/auth/driver")
+const driverAuthRoute = require("./routes/auth/driver")
+const orderRoute = require("./routes/auth/driver")
 
 // allow CORS
 app.use(cors())
@@ -17,7 +18,8 @@ mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("Database connection successfully"))
 .catch(() => console.log("Database connection failed"))
 
-app.use("/api/driver", driverAuth);
+app.use("/api/driver", driverAuthRoute);
+app.use("/api/order", orderRoute);
 
 app.listen(process.env.PORT || 8080, () => {
     console.log(`API server is app and running on PORT ${process.env.PORT || 8080}`)

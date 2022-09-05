@@ -6,15 +6,26 @@ const driverSchema = new Schema({
         type: String,
         default: "",
     },
-    pin: {
-        type: String,
-        required: true
-    },
     phone: {
         type: String,
         unique: true,
         required: true
     },
+    pin: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+    },
+    available: {
+        type: Boolean,
+        default: false
+    },
+    isProfileActive: {
+        type: Boolean,
+        default: false
+    }
 }, {timestamps: true})
 
 module.exports = mongoose.model("Drivers", driverSchema)
