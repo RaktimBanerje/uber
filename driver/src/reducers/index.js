@@ -13,7 +13,7 @@ export const reducer = (state, action) => {
     switch(action.type) {
         case "LOGIN": {
             AsyncStorage.multiSet([
-                ["user", action.payload.user], 
+                ["user", JSON.stringify(action.payload.user)], 
                 ["token", action.payload.token]
             ])
             return {...state, 

@@ -23,7 +23,8 @@ export default function Component() {
     (async () => {
       try {
         setLoading(true)
-        const user = await AsyncStorage.getItem("user")
+        let user = await AsyncStorage.getItem("user")
+        user = JSON.parse(user)
         const token = await AsyncStorage.getItem("token")
         if (token) {
             const res = await axios.post(`${API_SERVER_URI}/api/driver/isAuthenticate`, {token})

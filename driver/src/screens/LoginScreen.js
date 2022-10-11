@@ -37,6 +37,8 @@ const LoginScreen = () => {
                 setErrorMessage(err.response.data.message)
             }
             else {
+                console.log("Error is ")
+                console.log(err)
                 setErrorMessage("Something went wrong!")
             } 
             setLoading(false)

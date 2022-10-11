@@ -1,13 +1,19 @@
 const jwt = require("jsonwebtoken")
-const driver = require("../models/driver")
-const Driver = require("../models/driver")
 
 const isLogin = async function (req, res, next) {
-    const token = req.body.token
+    
+    let token = req.body.token
+
+    const authHeader = req.headers['authorization']
+    
+    if(!token && authHeader) {
+        token = authHeader.split(' ')[1]
+    }
+
     try {
         const decode = jwt.verify(token, "secret")
         if(decode){
-            req.user = await driver.findById(decode.id)
+            req.user = decode
             next()
         }    
     }

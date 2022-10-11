@@ -1,0 +1,59 @@
+<div id="wrapper">
+
+    <app-sidebar></app-sidebar>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            
+            <app-navbar></app-navbar>
+
+            <div class="container-fluid">
+                <h1 class="h3 mb-4 text-gray-800">Drivers</h1>
+                
+                <div *ngIf="isLoading; else elseBlock" class="spinner-border text-primary"></div>
+                
+                <ng-template #elseBlock>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>NAME</th>
+                                    <th>PHONE</th>
+                                    <th>AVAILABLE</th>
+                                    <th>ACTIVE</th>
+                                    <th>ACTIONS</th>
+
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let driver of drivers">
+                                <tr>
+                                    <td>{{driver.name}}</td>
+                                    <td>{{driver.phone}}</td>
+                                    <td>{{driver.available}}</td>
+                                    <td>{{driver.isProfileActive}}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-info mx-1">VIEW</button>
+                                            <button type="button" class="btn btn-primary mx-1">EDIT</button>
+                                            <button type="button" class="btn btn-danger mx-1">REMOVE</button>
+                                          </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+
+        <app-footer></app-footer>
+    </div>
+
+</div>
+
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<app-logout-modal></app-logout-modal>

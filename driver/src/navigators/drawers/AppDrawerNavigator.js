@@ -8,7 +8,7 @@ import { StoreContext } from '../../../App';
 
 import HomeScreen from '../../screens/HomeScreen'
 import ProfileScreen from '../../screens/ProfileScreen';
-import AddCarScreen from '../../screens/AddCarScreen';
+import VehicleStackNavigator from '../stacks/VehicleStackNavigator';
 
 const DrawerContent = (props) => {
 
@@ -52,11 +52,11 @@ const AppDrawerNavigator = () => {
                     }}
                 />
                 <Drawer.Screen 
-                    name="AddDevice" 
-                    component={AddCarScreen}
+                    name="Vehicles" 
+                    component={VehicleStackNavigator}
                     options={{
-                        title: "Add New Device",
-                        drawerLabel: "Add New Device",
+                        title: "Your Vehicles",
+                        drawerLabel: "Vehicles",
                         drawerIcon: ({color}) => <Ionicons name="car-outline" size={22} color={color} />
                     }} 
                 />

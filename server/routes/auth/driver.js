@@ -5,15 +5,20 @@ const jwt = require("jsonwebtoken")
 const isLogin = require("../../middlewares/isLogin")
 const Driver = require("../../models/driver")
 
-router.get("/", async (req, res) => {
-    const drivers = await Driver.find().select("-password")
-    return res.send(drivers)
+router.get("/", isLogin, async (req, res) => {
+    if(req.user.role == "ADMIN") {
+        const drivers = await Driver.find().select("-pin")
+        return res.send(drivers)
+    }
+    else {
+        res.status(401).send()
+    }
 })
 
 router.get("/get", async (req, res) => {
     const id = req.body.id
 
-    Driver.findById(id, "-password", async (err, drivers) => {
+    Driver.findById(id, "-pin", async (err, drivers) => {
         if (err) { 
             res.send(err).status(500)
         }
@@ -45,6 +50,7 @@ router.post("/register", async (req, res) => {
         const token = jwt.sign({
             id: driver._id,
             name: driver.name,
+            role: "DRIVER"
         }, "secret", { expiresIn: '1d' })
 
         return res.send({driver, token, registered: false})
